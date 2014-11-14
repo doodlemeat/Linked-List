@@ -19,7 +19,8 @@ class LinkedList
 	std::size_t m_size;
 
 public:
-	LinkedList();
+	LinkedList(); 
+	LinkedList(const std::initializer_list<T> &list);
 
 	void push_front(const T& data);
 	void push_back(const T& data);
@@ -31,7 +32,42 @@ public:
 	bool search(const T& value) const;
 	Node<T>* getHead() const;
 	std::size_t size() const;
+
+	T& operator[](int i)
+	{
+		return at(i);
+	}
+
+	T& at(int i)
+	{
+		if (i >= m_size)
+		{
+			std::cout << "at(" << i << ") size " << m_size << ", returning last element" << std::endl;
+			i = m_size - 1;
+		}
+		std::size_t c = 0;
+		Node<T>* tmp = m_head;
+		while (tmp != nullptr)
+		{
+			if (c == i)
+				return tmp->m_data;
+			tmp = tmp->m_next;
+			++c;
+		}
+	}
 };
+
+template<typename T>
+LinkedList<T>::LinkedList(const std::initializer_list<T> &list)
+{
+	m_size = 0;
+	m_head = nullptr;
+
+	for (std::initializer_list<T>::iterator it = list.begin(); it != list.end(); ++it)
+	{
+		push_back(*it);
+	}
+}
 
 template<typename T> 
 LinkedList<T>::LinkedList()
